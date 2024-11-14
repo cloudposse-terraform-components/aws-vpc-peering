@@ -1,4 +1,4 @@
-output "mock" {
-  description = "Mock output example for the Cloud Posse Terraform component template"
-  value       = local.enabled ? "hello ${basename(abspath(path.module))}" : ""
+output "vpc_peering" {
+  value       = module.vpc_peering
+  description = "VPC peering outputs"
 }
