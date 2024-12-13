@@ -5,7 +5,7 @@ tags:
   - provider/aws
 ---
 
-# Component: `vpc`
+# Component: `vpc-peering`
 
 This component is responsible for creating a peering connection between two VPCs existing in different AWS accounts.
 
