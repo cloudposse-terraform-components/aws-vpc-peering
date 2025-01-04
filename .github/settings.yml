@@ -5,5 +5,3 @@ repository:
   description: This component is responsible for creating a peering connection between two VPCs existing in different AWS accounts
   homepage: https://cloudposse.com/accelerate
   topics: terraform, terraform-component
-
-
