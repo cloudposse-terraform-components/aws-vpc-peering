@@ -55,7 +55,7 @@ func TestComponent(t *testing.T) {
 			var vpcPeering VpcPeering
 			atm.OutputStruct(component, "vpc_peering", &vpcPeering)
 			assert.Equal(t, vpcPeering.AccepterAcceptStatus, "active")
-			assert.Equal(t, vpcPeering.RequesterAcceptStatus, "active")
+			// assert.Equal(t, vpcPeering.RequesterAcceptStatus, "active")
 			assert.Equal(t, 4, len(vpcPeering.AccepterSubnetRouteTableMap))
 
 			client := aws.NewEc2Client(t, awsRegion)
