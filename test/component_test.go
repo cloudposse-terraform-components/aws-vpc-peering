@@ -25,8 +25,6 @@ func TestComponent(t *testing.T) {
 
 	// Define the test suite
 	fixture.Suite("default", func(t *testing.T, suite *helper.Suite) {
-		suite.AddDependency("vpc", "default-test")
-
 		// Test phase: Validate the functionality of the ALB component
 		suite.Test(t, "basic", func(t *testing.T, atm *helper.Atmos) {
 			defer atm.GetAndDestroy("vpc/a", "default-test", map[string]interface{}{})
