@@ -3,7 +3,11 @@ provider "aws" {
 
   region = var.accepter_region
 
-  assume_role {
-    role_arn = local.accepter_aws_assume_role_arn
+  dynamic "assume_role" {
+    # module.iam_roles.terraform_role_arn may be null, in which case do not assume a role.
+    for_each = compact([local.accepter_aws_assume_role_arn])
+    content {
+      role_arn = assume_role.value
+    }
   }
 }

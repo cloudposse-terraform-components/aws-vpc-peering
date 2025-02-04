@@ -1,0 +1,41 @@
+apiVersion: atmos/v1
+kind: AtmosVendorConfig
+metadata:
+  name: fixtures
+  description: Atmos vendoring manifest
+spec:
+  sources:
+    - component: "account-map"
+      source: github.com/cloudposse/terraform-aws-components.git//modules/account-map?ref={{.Version}}
+      version: 1.520.0
+      targets:
+        - "components/terraform/account-map"
+      included_paths:
+        - "**/*.tf"
+        - "**/*.md"
+        - "**/*.tftmpl"
+        - "**/modules/**"
+      excluded_paths: []
+
+    - component: "vpc"
+      source: github.com/cloudposse-terraform-components/aws-vpc.git//src?ref={{.Version}}
+      version: added-tests
+      targets:
+        - "components/terraform/vpc"
+      included_paths:
+        - "**/*.tf"
+        - "**/*.md"
+        - "**/*.tftmpl"
+        - "**/modules/**"
+      excluded_paths: []
+
+    - component: "vpc-peering"
+      source: "../../src"
+      targets:
+        - "components/terraform/vpc-peering"
+      included_paths:
+        - "**/*.tf"
+        - "**/*.md"
+        - "**/*.tftmpl"
+        - "**/modules/**"
+      excluded_paths: []

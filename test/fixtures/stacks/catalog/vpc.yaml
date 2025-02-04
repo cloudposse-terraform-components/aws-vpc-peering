@@ -1,0 +1,40 @@
+components:
+  terraform:
+    vpc:
+      metadata:
+        component: vpc
+        type: abstract
+      vars:
+        name: "vpc"
+        public_subnets_enabled: true
+        max_nats: 1
+        # Private subnets do not need internet access
+        nat_gateway_enabled: false
+        nat_instance_enabled: false
+        subnet_type_tag_key: "eg.cptest.co/subnet/type"
+        max_subnet_count: 3
+        vpc_flow_logs_enabled: false
+
+    vpc/a:
+      metadata:
+        component: vpc
+        inherits:
+          - vpc
+      vars:
+        name: "vpc-a"
+        availability_zones:
+          - "b"
+          - "c"
+        ipv4_primary_cidr_block: "172.16.0.0/16"
+
+    vpc/b:
+      metadata:
+        component: vpc
+        inherits:
+          - vpc
+      vars:
+        name: "vpc-b"
+        availability_zones:
+          - "a"
+          - "b"
+        ipv4_primary_cidr_block: "172.17.0.0/16"
