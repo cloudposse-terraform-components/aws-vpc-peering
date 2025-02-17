@@ -7,67 +7,81 @@ import (
 	"github.com/aws/aws-sdk-go-v2/service/ec2"
 	"github.com/aws/aws-sdk-go-v2/service/ec2/types"
 	"github.com/cloudposse/test-helpers/pkg/atmos"
-	helper "github.com/cloudposse/test-helpers/pkg/atmos/aws-component-helper"
+	helper "github.com/cloudposse/test-helpers/pkg/atmos/component-helper"
 	"github.com/gruntwork-io/terratest/modules/aws"
 	"github.com/stretchr/testify/assert"
 )
 
-func TestComponent(t *testing.T) {
-	// Define the AWS region to use for the tests
-	awsRegion := "us-east-2"
+type VpcPeering struct {
+	AccepterAcceptStatus        string            `json:"accepter_accept_status"`
+	AccepterConnectionID        string            `json:"accepter_connection_id"`
+	AccepterSubnetRouteTableMap map[string]string `json:"accepter_subnet_route_table_map"`
+	RequesterAcceptStatus       string            `json:"requester_accept_status"`
+	RequesterConnectionID       string            `json:"requester_connection_id"`
+}
 
-	// Initialize the test fixture
-	fixture := helper.NewFixture(t, "../", awsRegion, "test/fixtures")
+type ComponentSuite struct {
+	helper.TestSuite
+}
 
-	// Ensure teardown is executed after the test
-	defer fixture.TearDown()
-	fixture.SetUp(&atmos.Options{})
+func (s *ComponentSuite) TestBasic() {
+	const component = "vpc-peering/basic"
+	const stack = "default-test"
+	const awsRegion = "us-east-2"
 
-	// Define the test suite
-	fixture.Suite("default", func(t *testing.T, suite *helper.Suite) {
-		// Test phase: Validate the functionality of the ALB component
-		suite.Test(t, "basic", func(t *testing.T, atm *helper.Atmos) {
-			defer atm.GetAndDestroy("vpc/a", "default-test", map[string]interface{}{})
-			atm.GetAndDeploy("vpc/a", "default-test", map[string]interface{}{})
+	vpcOptions := s.GetAtmosOptions("vpc/b", stack, nil)
 
-			defer atm.GetAndDestroy("vpc/b", "default-test", map[string]interface{}{})
-			vpcComponent := atm.GetAndDeploy("vpc/b", "default-test", map[string]interface{}{})
+	vpcId := atmos.Output(s.T(), vpcOptions, "vpc_id")
 
-			vpcId := atm.Output(vpcComponent, "vpc_id")
+	inputs := map[string]interface{}{
+		"accepter_vpc": map[string]interface{}{
+			"id": vpcId,
+		},
+	}
 
-			inputs := map[string]interface{}{
-				"accepter_vpc": map[string]interface{}{
-					"id": vpcId,
-				},
-			}
+	defer s.DestroyAtmosComponent(s.T(), component, stack, &inputs)
+	options, _ := s.DeployAtmosComponent(s.T(), component, stack, &inputs)
+	assert.NotNil(s.T(), options)
 
-			defer atm.GetAndDestroy("vpc-peering/basic", "default-test", inputs)
-			component := atm.GetAndDeploy("vpc-peering/basic", "default-test", inputs)
-			assert.NotNil(t, component)
+	var vpcPeering VpcPeering
+	atmos.OutputStruct(s.T(), options, "vpc_peering", &vpcPeering)
+	assert.Equal(s.T(), vpcPeering.AccepterAcceptStatus, "active")
+	assert.Equal(s.T(), 4, len(vpcPeering.AccepterSubnetRouteTableMap))
 
-			type VpcPeering struct {
-				AccepterAcceptStatus        string            `json:"accepter_accept_status"`
-				AccepterConnectionID        string            `json:"accepter_connection_id"`
-				AccepterSubnetRouteTableMap map[string]string `json:"accepter_subnet_route_table_map"`
-				RequesterAcceptStatus       string            `json:"requester_accept_status"`
-				RequesterConnectionID       string            `json:"requester_connection_id"`
-			}
-			var vpcPeering VpcPeering
-			atm.OutputStruct(component, "vpc_peering", &vpcPeering)
-			assert.Equal(t, vpcPeering.AccepterAcceptStatus, "active")
-			// assert.Equal(t, vpcPeering.RequesterAcceptStatus, "active")
-			assert.Equal(t, 4, len(vpcPeering.AccepterSubnetRouteTableMap))
-
-			client := aws.NewEc2Client(t, awsRegion)
-			connections, err := client.DescribeVpcPeeringConnections(context.Background(), &ec2.DescribeVpcPeeringConnectionsInput{
-				VpcPeeringConnectionIds: []string{vpcPeering.AccepterConnectionID},
-			})
-			assert.NoError(t, err)
-			assert.Equal(t, 1, len(connections.VpcPeeringConnections))
-			connection := connections.VpcPeeringConnections[0]
-			assert.Equal(t, string(types.VpcPeeringConnectionStateReasonCodeActive), string(connection.Status.Code))
-			assert.Equal(t, string(types.VpcPeeringConnectionStateReasonCodeActive), string(connection.Status.Code))
-			assert.Equal(t, string(vpcPeering.AccepterConnectionID), string(*connection.VpcPeeringConnectionId))
-		})
+	client := aws.NewEc2Client(s.T(), awsRegion)
+	connections, err := client.DescribeVpcPeeringConnections(context.Background(), &ec2.DescribeVpcPeeringConnectionsInput{
+		VpcPeeringConnectionIds: []string{vpcPeering.AccepterConnectionID},
 	})
+	assert.NoError(s.T(), err)
+	assert.Equal(s.T(), 1, len(connections.VpcPeeringConnections))
+	connection := connections.VpcPeeringConnections[0]
+	assert.EqualValues(s.T(), types.VpcPeeringConnectionStateReasonCodeActive, connection.Status.Code)
+	assert.EqualValues(s.T(), vpcPeering.AccepterConnectionID, *connection.VpcPeeringConnectionId)
+
+	s.DriftTest(component, stack, &inputs)
+}
+
+func (s *ComponentSuite) TestEnabledFlag() {
+	const component = "vpc-peering/disabled"
+	const stack = "default-test"
+	const awsRegion = "us-east-2"
+
+	vpcOptions := s.GetAtmosOptions("vpc/b", stack, nil)
+	vpcId := atmos.Output(s.T(), vpcOptions, "vpc_id")
+
+	inputs := map[string]interface{}{
+		"accepter_vpc": map[string]interface{}{
+			"id": vpcId,
+		},
+	}
+
+	s.VerifyEnabledFlag(component, stack, &inputs)
+}
+
+func TestRunSuite(t *testing.T) {
+	suite := new(ComponentSuite)
+	suite.AddDependency(t, "vpc/a", "default-test", nil)
+	suite.AddDependency(t, "vpc/b", "default-test", nil)
+
+	helper.Run(t, suite)
 }

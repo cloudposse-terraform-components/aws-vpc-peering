@@ -33,5 +33,7 @@ module "vpc_peering" {
   accepter_region                          = var.accepter_region
   accepter_vpc_id                          = one(data.aws_vpc.accepter[*].id)
 
+  add_attribute_tag = var.add_attribute_tag
+
   context = module.this.context
 }
