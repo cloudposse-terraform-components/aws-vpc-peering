@@ -200,7 +200,7 @@ atmos terraform apply vpc-peering -s ue1-prod
 | Name | Source | Version |
 |------|--------|---------|
 | <a name="module_iam_roles"></a> [iam\_roles](#module\_iam\_roles) | ../account-map/modules/iam-roles | n/a |
-| <a name="module_requester_vpc"></a> [requester\_vpc](#module\_requester\_vpc) | cloudposse/stack-config/yaml//modules/remote-state | 1.5.0 |
+| <a name="module_requester_vpc"></a> [requester\_vpc](#module\_requester\_vpc) | cloudposse/stack-config/yaml//modules/remote-state | 1.8.0 |
 | <a name="module_this"></a> [this](#module\_this) | cloudposse/label/null | 0.25.0 |
 | <a name="module_vpc_peering"></a> [vpc\_peering](#module\_vpc\_peering) | cloudposse/vpc-peering-multi-account/aws | 0.19.1 |
 
@@ -219,6 +219,7 @@ atmos terraform apply vpc-peering -s ue1-prod
 | <a name="input_accepter_region"></a> [accepter\_region](#input\_accepter\_region) | Accepter AWS region | `string` | n/a | yes |
 | <a name="input_accepter_stage_name"></a> [accepter\_stage\_name](#input\_accepter\_stage\_name) | Accepter stage name if in v1 | `string` | `null` | no |
 | <a name="input_accepter_vpc"></a> [accepter\_vpc](#input\_accepter\_vpc) | Accepter VPC map of id, cidr\_block, or default arguments for the data source | `any` | n/a | yes |
+| <a name="input_add_attribute_tag"></a> [add\_attribute\_tag](#input\_add\_attribute\_tag) | If `true` will add additional attribute tag to the requester and accceptor resources | `bool` | `true` | no |
 | <a name="input_additional_tag_map"></a> [additional\_tag\_map](#input\_additional\_tag\_map) | Additional key-value pairs to add to each map in `tags_as_list_of_maps`. Not added to `tags` or `id`.<br/>This is for some rare cases where resources want additional configuration of tags<br/>and therefore take a list of maps with tag key, value, and additional configuration. | `map(string)` | `{}` | no |
 | <a name="input_attributes"></a> [attributes](#input\_attributes) | ID element. Additional attributes (e.g. `workers` or `cluster`) to add to `id`,<br/>in the order they appear in the list. New attributes are appended to the<br/>end of the list. The elements of the list are joined by the `delimiter`<br/>and treated as a single ID element. | `list(string)` | `[]` | no |
 | <a name="input_auto_accept"></a> [auto\_accept](#input\_auto\_accept) | Automatically accept peering request | `bool` | `true` | no |
