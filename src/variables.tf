@@ -60,3 +60,9 @@ variable "requester_vpc_component_name" {
   description = "Requester vpc component name"
   default     = "vpc"
 }
+
+variable "add_attribute_tag" {
+  type        = bool
+  default     = true
+  description = "If `true` will add additional attribute tag to the requester and accceptor resources"
+}

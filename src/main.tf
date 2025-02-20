@@ -24,7 +24,7 @@ module "vpc_peering" {
   auto_accept = var.auto_accept
 
   requester_allow_remote_vpc_dns_resolution = var.requester_allow_remote_vpc_dns_resolution
-  requester_aws_assume_role_arn             = coalesce(var.requester_role_arn, module.iam_roles.terraform_role_arn)
+  requester_aws_assume_role_arn             = one(compact([var.requester_role_arn, module.iam_roles.terraform_role_arn]))
   requester_region                          = var.region
   requester_vpc_id                          = local.requester_vpc_id
 
@@ -32,6 +32,8 @@ module "vpc_peering" {
   accepter_aws_assume_role_arn             = local.accepter_aws_assume_role_arn
   accepter_region                          = var.accepter_region
   accepter_vpc_id                          = one(data.aws_vpc.accepter[*].id)
+
+  add_attribute_tag = var.add_attribute_tag
 
   context = module.this.context
 }

@@ -1,0 +1,16 @@
+components:
+  terraform:
+    vpc-peering/basic:
+      metadata:
+        component: target
+      vars:
+        enabled: true
+        # Disable adding attribute tag to the requester and accceptor resources
+        # To avoid drifts as we are using the same account for both requester and accceptor
+        add_attribute_tag: false
+        requester_allow_remote_vpc_dns_resolution: true
+        accepter_allow_remote_vpc_dns_resolution: true
+        requester_vpc_component_name: vpc/a
+        accepter_vpc: '{{ (atmos.Component "vpc/b" "default-test").outputs.vpc }}'
+        accepter_region: "us-east-2"
+        accepter_stage_name: "default-test"
