@@ -19,7 +19,7 @@ data "aws_vpc" "accepter" {
 
 module "vpc_peering" {
   source  = "cloudposse/vpc-peering-multi-account/aws"
-  version = "0.19.1"
+  version = "1.0.0"
 
   auto_accept = var.auto_accept
 
