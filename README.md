@@ -222,7 +222,7 @@ atmos terraform apply vpc-peering -s ue1-prod
 | <a name="module_iam_roles"></a> [iam\_roles](#module\_iam\_roles) | ../account-map/modules/iam-roles | n/a |
 | <a name="module_requester_vpc"></a> [requester\_vpc](#module\_requester\_vpc) | cloudposse/stack-config/yaml//modules/remote-state | 1.8.0 |
 | <a name="module_this"></a> [this](#module\_this) | cloudposse/label/null | 0.25.0 |
-| <a name="module_vpc_peering"></a> [vpc\_peering](#module\_vpc\_peering) | cloudposse/vpc-peering-multi-account/aws | 0.19.1 |
+| <a name="module_vpc_peering"></a> [vpc\_peering](#module\_vpc\_peering) | cloudposse/vpc-peering-multi-account/aws | 1.0.0 |
 
 ## Resources
 
