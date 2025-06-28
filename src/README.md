@@ -187,13 +187,13 @@ atmos terraform apply vpc-peering -s ue1-prod
 | Name | Version |
 |------|---------|
 | <a name="requirement_terraform"></a> [terraform](#requirement\_terraform) | >= 1.0.0 |
-| <a name="requirement_aws"></a> [aws](#requirement\_aws) | >= 3.0 |
+| <a name="requirement_aws"></a> [aws](#requirement\_aws) | >= 3.0, < 6.0.0 |
 
 ## Providers
 
 | Name | Version |
 |------|---------|
-| <a name="provider_aws.accepter"></a> [aws.accepter](#provider\_aws.accepter) | >= 3.0 |
+| <a name="provider_aws.accepter"></a> [aws.accepter](#provider\_aws.accepter) | >= 3.0, < 6.0.0 |
 
 ## Modules
 
