@@ -8,7 +8,6 @@ tags:
 # Component: `vpc-peering`
 
 This component is responsible for creating a peering connection between two VPCs existing in different AWS accounts.
-
 ## Usage
 
 **Stack Level**: Regional
@@ -93,7 +92,7 @@ account:
 
 In the legacy account, create IAM role `acme-vpc-peering` with the following policy:
 
-**NOTE:** Replace `<LEGACY ACCOUNT ID>` with the ID of the legacy account.
+NOTE: Replace `<LEGACY ACCOUNT ID>` with the ID of the legacy account.
 
 ```json
 {
@@ -140,7 +139,7 @@ In the legacy account, create IAM role `acme-vpc-peering` with the following pol
 
 Add the following trust policy to the IAM role:
 
-**NOTE:** Replace `<IDENTITY ACCOUNT ID>` with the ID of the `identity` account in the new infrastructure.
+NOTE: Replace `<IDENTITY ACCOUNT ID>` with the ID of the `identity` account in the new infrastructure.
 
 ```json
 {
@@ -180,8 +179,8 @@ atmos terraform plan vpc-peering -s ue1-prod
 atmos terraform apply vpc-peering -s ue1-prod
 ```
 
-<!-- prettier-ignore-start -->
-<!-- BEGINNING OF PRE-COMMIT-TERRAFORM DOCS HOOK -->
+
+<!-- markdownlint-disable -->
 ## Requirements
 
 | Name | Version |
@@ -250,10 +249,17 @@ atmos terraform apply vpc-peering -s ue1-prod
 | Name | Description |
 |------|-------------|
 | <a name="output_vpc_peering"></a> [vpc\_peering](#output\_vpc\_peering) | VPC peering outputs |
-<!-- END OF PRE-COMMIT-TERRAFORM DOCS HOOK -->
-<!-- prettier-ignore-end -->
+<!-- markdownlint-restore -->
 
-- [cloudposse/terraform-aws-components](https://github.com/cloudposse/terraform-aws-components/tree/main/modules/vpc-peering) -
-  Cloud Posse's upstream component
+
+
+## References
+
+
+- [cloudposse/terraform-aws-components (vpc-peering)](https://github.com/cloudposse/terraform-aws-components/tree/main/modules/vpc-peering) - Cloud Posse's upstream component
+
+
+
 
 [<img src="https://cloudposse.com/logo-300x69.svg" height="32" align="right"/>](https://cpco.io/homepage?utm_source=github&utm_medium=readme&utm_campaign=cloudposse-terraform-components/aws-vpc-peering&utm_content=)
+
