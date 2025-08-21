@@ -176,9 +176,9 @@ usage: |-
   ```
 
 references:
-  - name: cloudposse/terraform-aws-components (vpc-peering)
+  - name: cloudposse-terraform-components
     description: Cloud Posse's upstream component
-    url: https://github.com/cloudposse/terraform-aws-components/tree/main/modules/vpc-peering
+    url: https://github.com/orgs/cloudposse-terraform-components/repositories
 tags:
   - component/vpc-peering
   - layer/network
