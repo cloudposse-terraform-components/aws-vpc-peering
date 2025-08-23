@@ -256,7 +256,7 @@ atmos terraform apply vpc-peering -s ue1-prod
 ## References
 
 
-- [cloudposse/terraform-aws-components (vpc-peering)](https://github.com/cloudposse/terraform-aws-components/tree/main/modules/vpc-peering) - Cloud Posse's upstream component
+- [cloudposse-terraform-components](https://github.com/orgs/cloudposse-terraform-components/repositories) - Cloud Posse's upstream component
 
 
 
